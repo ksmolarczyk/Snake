@@ -1,39 +1,34 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Grid extends React.Component {
-    render() {
-        return (
-            <div>
-                Grid
-            </div>
+const App =()=>{
+    return (
+        <div className="app">
+            <Board />
+            {/*<Snake />*/}
+        </div>
+    )
+};
 
-        );
-    }
-}
-
-class Main extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            score: 0
-        }
+class Board extends React.Component {
+    constructor(props){
+        super(props);
     }
     render() {
         return (
-            <div>
-                <h1>Snake</h1>
-                <h2>Score: {this.state.score}</h2>
-                <Grid
-                    />
+            <div className="board">
+                <h1>Snake Game</h1>
+                <div>
+                    <span> Score: {this.props.score}</span>
+                </div>
             </div>
-
-        );
+        )
     }
-}
+};
+
 document.addEventListener('DOMContentLoaded', function(){
     ReactDOM.render(
-        <Main />,
+        <App />,
         document.getElementById('app')
     );
 });
