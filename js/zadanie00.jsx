@@ -2,15 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 
-const App =()=>{
-    return (
-        <div className="app">
-            <Board />
-            <Grid />
-            <Snake />
-        </div>
-    )
-};
+
 
 class Board extends React.Component {
     constructor(props){
@@ -18,7 +10,7 @@ class Board extends React.Component {
     }
     render() {
         return (
-            <div className="board" style={{backgroundColor: "red", border:"1px solid black", width: "500px", height: "550px", position:"relative"}}>
+            <div className="board" style={{backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "550px", position:"relative"}}>
                 <h1>Snake Game</h1>
                 <div>
                     <span> Score: {this.props.score}</span>
@@ -31,17 +23,15 @@ class Board extends React.Component {
 class Grid extends React.Component {
     constructor(props){
         super(props);
+
     }
-
     render() {
-
 
         let gridArr = [];
 
-
         return (
             <div
-                className="grid" style={{backgroundColor:"grey", border:"2px solid black", width: "400px", height:"400px", position:"absolute", left:"55px", top:"120px"}}>
+                className="grid" style={{backgroundColor:"LightGray", border:"2px solid black", width: "400px", height:"400px", position:"absolute", left:"55px", top:"120px"}}>
                 {gridArr}
 
             </div>
@@ -53,15 +43,15 @@ class Grid extends React.Component {
 class Snake extends React.Component {
     constructor(props){
         super(props);
-        this.handleKey = this.handleKey.bind(this);
-
+       // this.handleKey = this.handleKey.bind(this); // donno...
     }
 
     // poruszanie sie snakeeee'a
-
+    doStuff(){
+        console.log("weeeeee")
+    }
     handleKey(e) {
-        let direction = e.keyCode;
-        // logs a number corresponding to the key pressed
+        const direction = e.keyCode;
         console.log(direction);
         switch(e.keyCode) {
             case 37:
@@ -90,31 +80,35 @@ class Snake extends React.Component {
     }
     //poruszanie sie snake nawet jesli user pozostaje bierny
     componentDidMount() {
-        this.timerID = setInterval(
-            () => this.tick(),
-            100
-        );
+        //this.timerID = setInterval(() => this.tick(),100);
     }
-
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        //clearInterval(this.timerID);
     }
-
     tick() {
-        console.log("Tick!");
+       // console.log("Tick!");
     }
-
-
-
     render() {
+        const snakeStyle = {width: "20px", height: "20px", backgroundColor: "blue", position: "absolute", top: "300px", left: "235px" }
         return (
-            <div className="snakeBody" style={{width: "20px", height: "20px", backgroundColor: "blue", position: "absolute", top: "300px", left: "235px" }}
-                 onKeyDown={this.handleKey}>
+            <div onClick={this.doStuff} className="snakeBody" style={snakeStyle} onKeyPress={(e)=>this.handleKey(e)}>
             </div>
 
         )
     }
 }
+class App extends React.Component{
+    render(){
+        return (
+            <div className="app">
+                <Board score={10}/>
+                <Grid />
+                <Snake moving={true}/>
+            </div>
+        )
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', function(){
     ReactDOM.render(
