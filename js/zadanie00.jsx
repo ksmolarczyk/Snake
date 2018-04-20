@@ -1,9 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
-
-
 class Board extends React.Component {
     constructor(props){
         super(props);
@@ -47,36 +44,37 @@ class Snake extends React.Component {
     }
 
     // poruszanie sie snakeeee'a
-    doStuff(){
-        console.log("weeeeee")
+    doStuff = (e)=> {
+        console.log("weeeeee",e)
     }
-    handleKey(e) {
-        const direction = e.keyCode;
-        console.log(direction);
-        switch(e.keyCode) {
-            case 37:
-                if(this.props.direction !== "RIGHT" && this.props.moving){
-                    this.props.changeDirection("LEFT")
-                }
-                break;
-            case 38:
-                if(this.props.direction !== "DOWN" && this.props.moving){
-                    this.props.changeDirection("UP")
-                }
-                break;
-            case 39:
-                if(this.props.direction !== "LEFT" && this.props.moving){
-                    this.props.changeDirection("RIGHT")
-                }
-                break;
-            case 40:
-                if(this.props.direction !== "UP" && this.props.moving) {
-                    this.props.changeDirection("DOWN")
-                }
-                break;
-            default:
-                break;
-        }
+    handleKey = (e) => {
+        console.log(e);
+        // const direction = e.keyCode;
+        // console.log(direction);
+        // switch(e.keyCode) {
+        //     case 37:
+        //         if(this.props.direction !== "RIGHT" && this.props.moving){
+        //             this.props.changeDirection("LEFT")
+        //         }
+        //         break;
+        //     case 38:
+        //         if(this.props.direction !== "DOWN" && this.props.moving){
+        //             this.props.changeDirection("UP")
+        //         }
+        //         break;
+        //     case 39:
+        //         if(this.props.direction !== "LEFT" && this.props.moving){
+        //             this.props.changeDirection("RIGHT")
+        //         }
+        //         break;
+        //     case 40:
+        //         if(this.props.direction !== "UP" && this.props.moving) {
+        //             this.props.changeDirection("DOWN")
+        //         }
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
     //poruszanie sie snake nawet jesli user pozostaje bierny
     componentDidMount() {
@@ -88,22 +86,49 @@ class Snake extends React.Component {
     tick() {
        // console.log("Tick!");
     }
+
+    componentWillMount(){
+      document.addEventListener("keydown",this.handleKey)
+    }
     render() {
-        const snakeStyle = {width: "20px", height: "20px", backgroundColor: "blue", position: "absolute", top: "300px", left: "235px" }
-        return (
-            <div onClick={this.doStuff} className="snakeBody" style={snakeStyle} onKeyPress={(e)=>this.handleKey(e)}>
+        const snakeStyle = {
+          width: "20px",
+          height: "20px",
+          backgroundColor: "blue",
+          position: "absolute",
+          top: "300px",
+          left: "235px" }
+
+        return (<div className="snakeBody"  style={snakeStyle}
+                    onClick={(e)=>{
+                      this.doStuff(e)
+                      this.handleKey(e)
+                    }}
+                    onKeyPress={(e)=>this.handleKey(e)}
+                    >
             </div>
 
         )
     }
 }
 class App extends React.Component{
+    constructor(props){
+      super(props)
+      this.state={
+        direction: "DOWN",
+        moving: true,
+        score: 0
+      }
+    }
+    changeDirection = (data)=>{
+      console.log("Change direction in app:",data);
+    }
     render(){
         return (
-            <div className="app">
-                <Board score={10}/>
+            <div  className="app">
+                <Board score={this.state.score}/>
                 <Grid />
-                <Snake moving={true}/>
+                <Snake direction={this.state.direction} moving={this.state.moving} changeDirection={this.changeDirection} />
             </div>
         )
     }
