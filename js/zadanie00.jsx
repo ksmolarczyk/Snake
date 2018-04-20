@@ -6,8 +6,9 @@ class Board extends React.Component {
         super(props);
     }
     render() {
+      const boardStyles = {backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "550px", position:"relative"}
         return (
-            <div className="board" style={{backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "550px", position:"relative"}}>
+            <div className="board" style={boardStyles}>
                 <h1>Snake Game</h1>
                 <div>
                     <span> Score: {this.props.score}</span>
@@ -30,7 +31,6 @@ class Grid extends React.Component {
             <div
                 className="grid" style={{backgroundColor:"LightGray", border:"2px solid black", width: "400px", height:"400px", position:"absolute", left:"55px", top:"120px"}}>
                 {gridArr}
-
             </div>
 
         )
@@ -44,37 +44,37 @@ class Snake extends React.Component {
     }
 
     // poruszanie sie snakeeee'a
-    doStuff = (e)=> {
-        console.log("weeeeee",e)
-    }
     handleKey = (e) => {
-        console.log(e);
-        // const direction = e.keyCode;
+        const direction = e.keyCode;
         // console.log(direction);
-        // switch(e.keyCode) {
-        //     case 37:
-        //         if(this.props.direction !== "RIGHT" && this.props.moving){
-        //             this.props.changeDirection("LEFT")
-        //         }
-        //         break;
-        //     case 38:
-        //         if(this.props.direction !== "DOWN" && this.props.moving){
-        //             this.props.changeDirection("UP")
-        //         }
-        //         break;
-        //     case 39:
-        //         if(this.props.direction !== "LEFT" && this.props.moving){
-        //             this.props.changeDirection("RIGHT")
-        //         }
-        //         break;
-        //     case 40:
-        //         if(this.props.direction !== "UP" && this.props.moving) {
-        //             this.props.changeDirection("DOWN")
-        //         }
-        //         break;
-        //     default:
-        //         break;
-        // }
+        switch(e.keyCode) {
+            case 37:
+            console.log("LEFT");
+                if(this.props.direction !== "RIGHT" && this.props.moving){
+                    this.props.changeDirection("LEFT")
+                }
+                break;
+            case 38:
+            console.log("UP");
+                if(this.props.direction !== "DOWN" && this.props.moving){
+                    this.props.changeDirection("UP")
+                }
+                break;
+            case 39:
+            console.log("RIGHT");
+                if(this.props.direction !== "LEFT" && this.props.moving){
+                    this.props.changeDirection("RIGHT")
+                }
+                break;
+            case 40:
+            console.log("DOWN");
+                if(this.props.direction !== "UP" && this.props.moving) {
+                    this.props.changeDirection("DOWN")
+                }
+                break;
+            default:
+                break;
+        }
     }
     //poruszanie sie snake nawet jesli user pozostaje bierny
     componentDidMount() {
@@ -99,13 +99,7 @@ class Snake extends React.Component {
           top: "300px",
           left: "235px" }
 
-        return (<div className="snakeBody"  style={snakeStyle}
-                    onClick={(e)=>{
-                      this.doStuff(e)
-                      this.handleKey(e)
-                    }}
-                    onKeyPress={(e)=>this.handleKey(e)}
-                    >
+        return (<div className="snakeBody"  style={snakeStyle}>
             </div>
 
         )
@@ -121,7 +115,11 @@ class App extends React.Component{
       }
     }
     changeDirection = (data)=>{
-      console.log("Change direction in app:",data);
+      console.log("Change direction in app from:",this.state.direction,"to:",data);
+
+      this.setState({
+        direction: data
+      })
     }
     render(){
         return (
