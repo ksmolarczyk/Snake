@@ -6,7 +6,7 @@ class Board extends React.Component {
         super(props);
     }
     render() {
-      const boardStyles = {backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "550px", position:"relative"}
+      const boardStyles = {backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "540px", position:"relative"}
         return (
             <div className="board" style={boardStyles}>
                 <h1>Snake Game</h1>
@@ -21,18 +21,39 @@ class Board extends React.Component {
 class Grid extends React.Component {
     constructor(props){
         super(props);
-
+        this.state = {grid: this.generateGrid(15,15)};
     }
+
+    generateGrid(cols, rows, value) {
+        let array = [];
+        for(let i=0; i < rows; i++) {
+            array.push([]);
+            array[i].push( new Array(cols));
+
+            for(let j=0; j < cols; j++) {
+                array[i][j] = value;
+            }
+        }
+
+        return array;
+    }
+
     render() {
-
-        let gridArr = [];
-
         return (
             <div
-                className="grid" style={{backgroundColor:"LightGray", border:"2px solid black", width: "400px", height:"400px", position:"absolute", left:"55px", top:"120px"}}>
-                {gridArr}
+                className="grid" style={{backgroundColor:"LightGray", border:"2px solid black", width: "auto", height:"auto", position:"absolute", left:"55px", top:"120px"}}>
+                <table>
+                    <tbody>
+                    {this.state.grid.map((row, i) =>
+                        <tr key={i}>
+                            {row.map((col, j) =>
+                                <td key={j} style={{backgroundColor:"pink", border:"1px solid black", width: "20px", height:"20px"}}>{col}</td>
+                            )}
+                        </tr>
+                    )}
+                    </tbody>
+                </table>
             </div>
-
         )
     }
 }
