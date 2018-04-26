@@ -1,162 +1,168 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Board extends React.Component {
-    constructor(props){
-        super(props);
-    }
-    render() {
-      const boardStyles = {backgroundColor: "MistyRose", border:"1px solid black", width: "500px", height: "540px", position:"relative"}
-        return (
-            <div className="board" style={boardStyles}>
-                <h1>Snake Game</h1>
-                <div>
-                    <span> Score: {this.props.score}</span>
-                </div>
-            </div>
-        )
-    }
-}
+const Header = ({ moves }) => {
+    return <h1>Move Game - moves = {moves}</h1>;
+};
+
+//****************************************************************/
 
 class Grid extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {grid: this.generateGrid(15,15)};
-    }
-
-    generateGrid(cols, rows, value) {
-        let array = [];
-        for(let i=0; i < rows; i++) {
-            array.push([]);
-            array[i].push( new Array(cols));
-
-            for(let j=0; j < cols; j++) {
-                array[i][j] = value;
-            }
-        }
-
-        return array;
-    }
-
     render() {
+        const styleBox = (i, j) => {
+            return {
+                backgroundColor: this.props.grid[i][j] ? "green" : "pink",
+                border: "1px solid black",
+                width: "20px",
+                height: "20px"
+            };
+        };
+
         return (
             <div
-                className="grid" style={{backgroundColor:"LightGray", border:"2px solid black", width: "auto", height:"auto", position:"absolute", left:"55px", top:"120px"}}>
+                className="grid"
+                style={{
+                    backgroundColor: "LightGray",
+                    border: "2px solid black",
+                    width: "auto",
+                    height: "auto",
+                    position: "absolute",
+                    left: "55px",
+                    top: "120px"
+                }}
+            >
                 <table>
                     <tbody>
-                    {this.state.grid.map((row, i) =>
+                    {this.props.grid.map((row, i) => (
                         <tr key={i}>
-                            {row.map((col, j) =>
-                                <td key={j} style={{backgroundColor:"pink", border:"1px solid black", width: "20px", height:"20px"}}>{col}</td>
-                            )}
+                            {row.map((col, j) => <td key={j} style={styleBox(i, j)} />)}
                         </tr>
-                    )}
+                    ))}
                     </tbody>
                 </table>
             </div>
-        )
+        );
     }
 }
 
-class Snake extends React.Component {
-    constructor(props){
-        super(props);
-       // this.handleKey = this.handleKey.bind(this); // donno...
-    }
+//****************************************************************/
 
-    // poruszanie sie snakeeee'a
-    handleKey = (e) => {
-        const direction = e.keyCode;
-        // console.log(direction);
-        switch(e.keyCode) {
+class Controls extends React.Component {
+    handleKey = e => {
+        let direction = "";
+        switch (e.keyCode) {
             case 37:
-            console.log("LEFT");
-                if(this.props.direction !== "RIGHT" && this.props.moving){
-                    this.props.changeDirection("LEFT")
-                }
+                direction = "LEFT";
                 break;
             case 38:
-            console.log("UP");
-                if(this.props.direction !== "DOWN" && this.props.moving){
-                    this.props.changeDirection("UP")
-                }
+                direction = "UP";
                 break;
             case 39:
-            console.log("RIGHT");
-                if(this.props.direction !== "LEFT" && this.props.moving){
-                    this.props.changeDirection("RIGHT")
-                }
+                direction = "RIGHT";
                 break;
             case 40:
-            console.log("DOWN");
-                if(this.props.direction !== "UP" && this.props.moving) {
-                    this.props.changeDirection("DOWN")
+                direction = "DOWN";
+                break;
+            default:
+                break;
+        }
+        if (direction) this.props.handleMove(direction);
+    };
+
+    componentWillMount() {
+        document.addEventListener("keydown", this.handleKey.bind(this));
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.handleKey.bind(this));
+    }
+
+    render() {
+        return (
+            <h3 onKeyDown={e => this.handleKey(e)}>Press and arrow key to move!</h3>
+        );
+    }
+}
+
+//****************************************************************/
+
+const GRID_SIZE = 15;
+const INIT_X = 8;
+const INIT_Y = 8;
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            grid: this.generateGrid(GRID_SIZE, GRID_SIZE, 0),
+            moves: 0,
+            curPos: { x: INIT_X, y: INIT_Y }
+        };
+
+        this.state.grid[INIT_Y][INIT_X] = 1;
+    }
+    generateGrid(cols, rows, value) {
+        let array = [];
+        for (let i = 0; i < rows; i++) {
+            array.push([]);
+            array[i].push(new Array(cols));
+
+            for (let j = 0; j < cols; j++) {
+                array[i][j] = value;
+            }
+        }
+        return array;
+    }
+
+    handleMove(move) {
+        let newGrid = this.state.grid;
+        let newCurPos = { ...this.state.curPos };
+        switch (move) {
+            case "LEFT":
+                if (newCurPos.x > 0) {
+                    newCurPos.x--;
+                } else {
+                    return;
+                }
+                break;
+            case "UP":
+                if (newCurPos.y > 0) {
+                    newCurPos.y--;
+                } else {
+                    return;
+                }
+                break;
+            case "RIGHT":
+                if (newCurPos.x < GRID_SIZE - 1) {
+                    newCurPos.x++;
+                } else {
+                    return;
+                }
+                break;
+            case "DOWN":
+                if (newCurPos.y < GRID_SIZE - 1) {
+                    newCurPos.y++;
+                } else {
+                    return;
                 }
                 break;
             default:
                 break;
         }
-    }
-    //poruszanie sie snake nawet jesli user pozostaje bierny
-    componentDidMount() {
-        //this.timerID = setInterval(() => this.tick(),100);
-    }
-    componentWillUnmount() {
-        //clearInterval(this.timerID);
-    }
-    tick() {
-       // console.log("Tick!");
+        newGrid[newCurPos.y][newCurPos.x] = 1;
+        newGrid[this.state.curPos.y][this.state.curPos.x] = 0;
+        this.setState({ grid: newGrid, curPos: newCurPos, moves: this.state.moves+1 });
     }
 
-    componentWillMount(){
-      document.addEventListener("keydown",this.handleKey)
-    }
     render() {
-        const snakeStyle = {
-          width: "20px",
-          height: "20px",
-          backgroundColor: "blue",
-          position: "absolute",
-          top: "300px",
-          left: "235px" }
-
-        return (<div className="snakeBody"  style={snakeStyle}>
-            </div>
-
-        )
-    }
-}
-class App extends React.Component{
-    constructor(props){
-      super(props)
-      this.state={
-        direction: "DOWN",
-        moving: true,
-        score: 0
-      }
-    }
-    changeDirection = (data)=>{
-      console.log("Change direction in app from:",this.state.direction,"to:",data);
-
-      this.setState({
-        direction: data
-      })
-    }
-    render(){
         return (
-            <div  className="app">
-                <Board score={this.state.score}/>
-                <Grid />
-                <Snake direction={this.state.direction} moving={this.state.moving} changeDirection={this.changeDirection} />
+            <div>
+                <Header moves={this.state.moves} />
+                <Controls handleMove={this.handleMove.bind(this)} />
+                <Grid grid={this.state.grid} />
             </div>
-        )
+        );
     }
-}
+} // App
 
-
-document.addEventListener('DOMContentLoaded', function(){
-    ReactDOM.render(
-        <App />,
-        document.getElementById('app')
-    );
-});
+ReactDOM.render(<App />, document.getElementById("app"));
