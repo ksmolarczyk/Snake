@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const Header = ({ moves, points }) => {
-    return <h1>Move Game - moves = {moves}, points = {points -1}</h1>;
+const Header = ({ points }) => {
+    return <h1 style={{color: '#ff4447'}}
+    >SNAKE GAME, points = {points -1}</h1>;
 };
 
 //****************************************************************/
@@ -243,13 +244,13 @@ class App extends React.Component {
 
         newGrid[newFood.y][newFood.x] = 2 ;
         this.handleCollision(newSnake, newPoints);
-        this.setState({ grid: newGrid, curPos: newCurPos, snake: newSnake, points: newPoints, food: newFood, moves: this.state.moves+1 });
+        this.setState({ grid: newGrid, curPos: newCurPos, snake: newSnake, points: newPoints, food: newFood });
     }
 
     render() {
         return (
             <div>
-                <Header moves={this.state.moves} points={this.state.points} />
+                <Header points={this.state.points} />
                 <Controls handleMove={this.handleMove.bind(this)} />
                 <Grid grid={this.state.grid} />
             </div>
