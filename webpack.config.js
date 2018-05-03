@@ -8,7 +8,7 @@ const webpack = require("webpack");
 module.exports = {
     devtool: 'cheap-eval-source-map',
     entry: {
-        main: path.join(__dirname, 'js', 'zadanie00.jsx')
+        main: path.join(__dirname, 'js', 'zadanie01.jsx')
     },
     output: {
         path: path.join(__dirname, 'dist'),
