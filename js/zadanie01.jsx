@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 const Header = ({ points }) => {
     return <h1 style={{color: '#ff4447'}}
-    >SNAKE GAME, points = {points -1}</h1>;
+    >SNAKE GAME. points = {points -1}</h1>;
 };
 
 //****************************************************************/
