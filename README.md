@@ -1,2 +1,2 @@
-# Snake
-przykladowe
+# Snake game 
+created in React
